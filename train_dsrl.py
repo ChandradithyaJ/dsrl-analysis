@@ -11,7 +11,8 @@ from omegaconf import OmegaConf
 import gym, d4rl
 import d4rl.gym_mujoco
 import sys
-sys.path.append('./dppo')
+# sys.path.append('./dppo')
+sys.path.append(os.path.join(os.path.dirname(__file__), "dppo")) # my change
  
 from stable_baselines3 import SAC, DSRL
 from stable_baselines3.common.callbacks import CheckpointCallback, BaseCallback
@@ -25,9 +26,6 @@ OmegaConf.register_new_resolver("round_up", math.ceil)
 OmegaConf.register_new_resolver("round_down", math.floor)
 
 base_path = os.path.dirname(os.path.abspath(__file__))
-
-	
-
 
 @hydra.main(
 	config_path=os.path.join(base_path, "cfg/robomimic"), config_name="dsrl_can.yaml", version_base=None
@@ -55,7 +53,7 @@ def main(cfg: OmegaConf):
 	def make_env():
 		if cfg.env_name in ['halfcheetah-medium-v2', 'hopper-medium-v2', 'walker2d-medium-v2']:
 			env = gym.make(cfg.env_name)
-			env = ObservationWrapperGym(env, cfg.normalization_path)
+			env = ObservationWrapperGym(env, cfg.normalization_path) # normalizes observation and action values
 		elif cfg.env_name in ['lift', 'can', 'square', 'transport']:
 			env = make_robomimic_env(env=cfg.env_name, normalization_path=cfg.normalization_path, low_dim_keys=cfg.env.wrappers.robomimic_lowdim.low_dim_keys, dppo_path=cfg.dppo_path)
 			env = ObservationWrapperRobomimic(env, reward_offset=cfg.env.reward_offset)

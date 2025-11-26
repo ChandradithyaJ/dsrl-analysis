@@ -14,6 +14,8 @@ __pycache__/
 _build/
 *.npz
 *.pth
+*.hdf5
+*.out
 .pytype/
 git_rewrite_commit_history.sh
 
@@ -54,3 +56,5 @@ src
 *.prof
 
 MUJOCO_LOG.TXT
+
+batch.script
