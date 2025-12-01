@@ -4,12 +4,13 @@ hydra:
   run:  
     dir: ${logdir}
 
-name: robomimic_can_dsrl_${now:%Y-%m-%d}_${now:%H-%M-%S}_${seed}_worse
+data_split: worse_okay
+name: robomimic_can_dsrl_${now:%Y-%m-%d}_${now:%H-%M-%S}_${seed}_${data_split}
 logdir: ${log_dir}/robomimic-dsrl/${name}/${now:%Y-%m-%d}_${now:%H-%M-%S}_${seed}
-base_policy_path: ./dppo/log/robomimic-pretrain/can/can_pre_diffusion_mlp_ta4_td5_ddim5_size512_worse/2025-11-24_18-25-00_42/checkpoint/state_3000.pt
+base_policy_path: ./dppo/log/robomimic-pretrain/can/can_pre_diffusion_mlp_ta4_td20_ddim5_size512_${data_split}/2025-11-25_15-25-45_42/checkpoint/state_5000.pt
 offline_data_path: ./dppo/log/robomimic/can_test/train_offline.npz
 dppo_path: ./dppo
-normalization_path: ./dppo/log/robomimic/${env_name}/normalization.npz
+normalization_path: ./dppo/log/robomimic/${env_name}/${data_split}_normalization.npz
 
 algorithm: dsrl_na # options are: dsrl_na, dsrl_sac
 
@@ -32,9 +33,9 @@ save_replay_buffer: False
 
 env:
   n_envs:  4
-  n_eval_envs: 20
+  n_eval_envs: 25
   name: ${env_name}
-  max_episode_steps: 300
+  max_episode_steps: 3000
   reset_at_iteration: False
   save_video: False
   best_reward_threshold_for_success: 1 
@@ -76,14 +77,14 @@ train:
   critic_backup_combine_type: min
 
 model:
-  _target_: model.diffusion.diffusion_eval.DiffusionEval
+  _target_: dppo.model.diffusion.diffusion_eval.DiffusionEval
   ft_denoising_steps: 0
   predict_epsilon: True
   denoised_clip_value: 1.0
   randn_clip_value: 3
   network_path: ${base_policy_path}
   network:
-    _target_: model.diffusion.mlp_diffusion.DiffusionMLP
+    _target_: dppo.model.diffusion.mlp_diffusion.DiffusionMLP
     time_dim: 16
     mlp_dims: [512, 512, 512]
     residual_style: True
