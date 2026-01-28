@@ -10,6 +10,7 @@ name: ${env}_pre_diffusion_mlp_ta${horizon_steps}_td${denoising_steps}_ddim5_siz
 logdir: ${oc.env:DPPO_LOG_DIR}/robomimic-pretrain/${env}/${name}/${now:%Y-%m-%d}_${now:%H-%M-%S}_${seed}
 train_dataset_path: ${oc.env:DPPO_DATA_DIR}/robomimic/${env}/${data_split}_train.npz
 # train_dataset_path: ${oc.env:DPPO_DATA_DIR}/robomimic/${env}_worse/train.npz
+normalization_path: ${oc.env:DPPO_DATA_DIR}/robomimic/${env}/${data_split}_normalization.npz
 
 # python script/run.py --config-name=pre_diffusion_mlp --config-dir=cfg/robomimic/pretrain/can
 
@@ -28,7 +29,7 @@ wandb:
   run: ${now:%H-%M-%S}_${name}
 
 train:
-  n_epochs: 5000
+  n_epochs: 8000
   batch_size: 256
   learning_rate: 1e-4
   weight_decay: 1e-6

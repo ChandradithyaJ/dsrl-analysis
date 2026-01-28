@@ -21,6 +21,9 @@ from stable_baselines3.common.vec_env import SubprocVecEnv, DummyVecEnv
 from env_utils import DiffusionPolicyEnvWrapper, ObservationWrapperRobomimic, ObservationWrapperGym, ActionChunkWrapper, make_robomimic_env
 from utils import load_base_policy, load_offline_data, collect_rollouts, LoggingCallback
 
+import warnings
+warnings.filterwarnings("ignore", module="gym")
+
 OmegaConf.register_new_resolver("eval", eval, replace=True)
 OmegaConf.register_new_resolver("round_up", math.ceil)
 OmegaConf.register_new_resolver("round_down", math.floor)
