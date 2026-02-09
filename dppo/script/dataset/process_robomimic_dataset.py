@@ -242,6 +242,8 @@ def make_dataset(load_path, save_dir, save_name_prefix, val_split, normalize, ma
             traj_lengths=np.array(out_train["traj_lengths"]),
         )
 
+        print("Train save path: ", train_save_path)
+
         val_save_path = os.path.join(save_dir, save_name_prefix + "val.npz")
         np.savez_compressed(
             val_save_path,
@@ -251,6 +253,8 @@ def make_dataset(load_path, save_dir, save_name_prefix, val_split, normalize, ma
             terminals=np.array([False] * len(out_val["states"])),
             traj_lengths=np.array(out_val["traj_lengths"]),
         )
+
+        print("Val save path: ", val_save_path)
 
         # Save normalization stats if required
         if normalize:
@@ -264,6 +268,8 @@ def make_dataset(load_path, save_dir, save_name_prefix, val_split, normalize, ma
                 action_min=action_min,
                 action_max=action_max,
             )
+
+            print("Normalization save path: ", normalization_save_path)
 
         # Logging final information
         logging.info(
